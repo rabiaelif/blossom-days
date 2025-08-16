@@ -1,0 +1,291 @@
+@import "tailwindcss";
+
+:root {
+  --primary-color: #FFB88C;
+  --secondary-color: #FFE2D0;
+  --leaf-color: #637A50;
+  --completed-color: #FFCE1C;
+
+}
+
+body {
+  font-family: 'Instrument Serif', sans-serif;
+  background-color: #FFF9F5;
+  overflow-x: hidden;
+
+}
+
+
+
+.habit-title {
+  text-align: center;
+  color: #4E3E2E;
+  margin-bottom: 30px;
+}
+
+.tree-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  background-color: #FFE2D0;
+  border-radius: 1000px;
+  height: 800px;
+  width: 800px;
+
+}
+
+.tree {
+  width: 300px;
+  height: auto;
+  position: relative;
+}
+
+.leaf {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.leaf.completed {
+  fill: var(--completed-color);
+  filter: drop-shadow(0 0 5px rgba(255, 206, 28, 0.7));
+}
+
+.leaf:hover {
+  transform: scale(1.05);
+}
+
+.habit-list {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.habit-item {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4E3E2E;
+
+}
+
+
+.back {
+  width: 178px;
+  height: 290px;
+  background-color: #637A50;
+}
+
+.wrapper {
+  width: 768px;
+  height: 768px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle {
+  width: 768px;
+  height: 768px;
+  border-radius: 50%;
+  background: conic-gradient(#10b981 0% 7.69%,
+      #d5c8c0 7.69% 100%);
+  mask: radial-gradient(transparent 100px, black 51px);
+}
+
+.icon-shape {
+  width: 10px;
+  height: 30px;
+  position: relative;
+}
+
+.icon-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #FFE2D0;
+  display: block;
+  border-radius: 2px;
+}
+
+.icon-mark {
+  width: 6px;
+  height: 6px;
+  background-color: #000;
+  border-radius: 50%;
+  position: absolute;
+  top: 6px;
+  left: 2px;
+}
+
+.flower {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 100px auto;
+}
+
+.petal {
+  position: absolute;
+  width: 60px;
+  height: 120px;
+  background: pink;
+  border-radius: 50% 50% 0 0;
+  transform-origin: 50% 100%;
+}
+
+.petal1 {
+  transform: rotate(0deg) translateY(-60px);
+}
+
+.petal2 {
+  transform: rotate(60deg) translateY(-60px);
+}
+
+.petal3 {
+  transform: rotate(120deg) translateY(-60px);
+}
+
+.petal4 {
+  transform: rotate(180deg) translateY(-60px);
+}
+
+.petal5 {
+  transform: rotate(240deg) translateY(-60px);
+}
+
+.petal6 {
+  transform: rotate(300deg) translateY(-60px);
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  background: yellow;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+
+.habit-container {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  margin-left: 300px;
+  padding: 20px;
+  padding-top: 50px;
+
+}
+
+.month-switcher {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.month-button {
+  background-color: #dcdcdc;
+  padding: 10px 20px;
+  border-radius: 5px;
+
+  cursor: pointer;
+}
+
+.month-button.active {
+  background-color: red;
+  color: white;
+}
+
+.habit-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button {
+  background-color: transparent;
+  color: black;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+}
+
+.button:hover {
+  background-color: rgba(255, 226, 208, 0.5);
+  border-radius: 50px;
+}
+.button:active {
+  background-color: rgba(255, 226, 208, 0.5);
+  border-radius: 50px;
+  border: 2px;
+  border-color: #000;
+}
+
+
+.button:disabled {
+  background-color: black;
+  cursor: not-allowed;
+}
+
+.wheel {
+  position: relative;
+  height: 1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.wheel-svg {
+  width: 950px;
+  height: 950px;
+  position: absolute;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1000;
+  margin-top: -45px;
+}
+
+
+.month-display {
+  min-width: 150px;
+  font-size: 1.2rem;
+  color: #000;
+  text-align: center;
+  user-select: none;
+}
+
+.navigation {
+  display: flex;
+  gap: 8rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  text-align: center;
+}
+
+
+.navigation button {
+  flex-shrink: 0;
+  padding: 0.6rem 0.6rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: fixed;
+}
