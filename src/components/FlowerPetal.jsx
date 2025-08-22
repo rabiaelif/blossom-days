@@ -1,86 +1,88 @@
 import { useEffect, useState } from "react";
-import { db } from "../lib/firebase"; // kendi yoluna göre düzelt
+import { db } from "../lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import FlowerCenter from "./Flower/FlowerCenter";
 import FlowerStem from "./Flower/FlowerStem";
 
-const Icon = ({ petalColor = '#FFE2D0', petalCount = 7, startNumber = 1, storageKey = 'selectedPetals', userId = "demoUser", habitName
+const FlowerPetal = ({
+  petalColor = '#FFE2D0',
+  petalCount = 7, // Eksikti, ekledim
+  startNumber = 1,
+  userId = "demoUser",
+  habitName,
+  monthIndex,
+  uniqueKey // Her çiçek için unique identifier
 }) => {
   const radius = 2;
   const [selectedPetals, setSelectedPetals] = useState([]);
 
-  const getCurrentMonthYear = () => {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  // 🔥 UNIQUE Firestore document ID oluştur
+  const getDocId = () => {
+    return `${userId}_${habitName}_month${monthIndex}_key${uniqueKey}`;
   };
-  const currentMonthYear = getCurrentMonthYear();
-  console.log("Aktif ay:", currentMonthYear);
-
 
   useEffect(() => {
     const fetchData = async () => {
-      const docRef = doc(db, "petalSelections", userId);
-      const docSnap = await getDoc(docRef);
+      if (!userId || !habitName) return;
 
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        if (data[habitName]) {
-          setSelectedPetals(data[habitName][currentMonthYear] || []);
+      try {
+        const docId = getDocId(); // Unique ID'yi kullan
+        const docRef = doc(db, "flowerPetals", docId); // Yeni collection
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setSelectedPetals(data.petals || []);
         } else {
-          // Yeni habit için alan oluştur
+          // Yeni doküman oluştur
           await setDoc(docRef, {
-            [habitName]: { [currentMonthYear]: [] },
-          }, { merge: true });
-          setSelectedPetals([]);
+            userId,
+            habitName,
+            monthIndex,
+            uniqueKey,
+            petals: [],
+            createdAt: new Date()
+          });
         }
-      } else {
-        await setDoc(docRef, {
-          [habitName]: { [currentMonthYear]: [] },
-        });
-        setSelectedPetals([]);
+      } catch (error) {
+        console.error("Veri çekme hatası:", error);
       }
     };
 
-
     fetchData();
-  }, [userId]);
+  }, [userId, habitName, monthIndex, uniqueKey]);
 
+  const togglePetal = async (number) => {
+    const newSelectedPetals = selectedPetals.includes(number)
+      ? selectedPetals.filter(n => n !== number)
+      : [...selectedPetals, number];
 
+    setSelectedPetals(newSelectedPetals);
 
-  useEffect(() => {
-    const saveData = async () => {
-      const docRef = doc(db, "petalSelections", userId);
-      await setDoc(docRef, {
-        [habitName]: {
-          [currentMonthYear]: selectedPetals,
+    // Firestore'a kaydet
+    try {
+      const docId = getDocId();
+      await setDoc(
+        doc(db, "flowerPetals", docId),
+        { 
+          petals: newSelectedPetals,
+          lastUpdated: new Date()
         },
-      }, { merge: true });
-    };
-
-
-    if (selectedPetals.length > 0) {
-      saveData();
+        { merge: true }
+      );
+    } catch (error) {
+      console.error("Veri kaydetme hatası:", error);
     }
-  }, [selectedPetals, userId]);
-
-
-  const togglePetal = (number) => {
-    setSelectedPetals(prev =>
-      prev.includes(number)
-        ? prev.filter(n => n !== number)
-        : [...prev, number]
-    );
   };
 
   const petals = [];
   for (let i = 0; i < petalCount; i++) {
     const angle = (2 * Math.PI * i) / petalCount;
     const angleDeg = (angle * 180) / Math.PI;
-
     const x = radius * Math.cos(angle);
     const y = radius * Math.sin(angle);
-
     const petalNumber = startNumber + i;
+
     petals.push(
       <g key={i} transform={`translate(${x}, ${y}) rotate(${angleDeg})`} onClick={() => togglePetal(petalNumber)} style={{ cursor: "pointer" }}>
         <ellipse
@@ -112,7 +114,6 @@ const Icon = ({ petalColor = '#FFE2D0', petalCount = 7, startNumber = 1, storage
             fontWeight="semibold"
             fontFamily="Arial, sans-serif"
             style={{ userSelect: 'none' }}
-
           >
             {petalNumber}
           </text>
@@ -130,4 +131,4 @@ const Icon = ({ petalColor = '#FFE2D0', petalCount = 7, startNumber = 1, storage
   );
 };
 
-export default Icon;
+export default FlowerPetal;
