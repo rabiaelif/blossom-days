@@ -13,11 +13,12 @@ export default function App() {
       <ErrorBoundary>
         <Sidebar 
           onSelectHabit={setSelectedHabit} 
-          // 🔥 YENİ: Seçili habit'i de gönder (opsiyonel)
-          selectedHabit={selectedHabit}
+          selectedHabit={selectedHabit} // 🔥 Seçili habit'i gönder
+          userId={userId}
         />
-      </ErrorBoundary>
       <MainContent habit={selectedHabit} userId={userId} />
+            </ErrorBoundary>
+
     </div>
   );
 }

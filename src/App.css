@@ -5,6 +5,8 @@
   --secondary-color: #FFE2D0;
   --leaf-color: #637A50;
   --completed-color: #FFCE1C;
+  --wheel-scale: 1.12;
+  --tree-base-size: 800px;
 
 }
 
@@ -27,11 +29,29 @@ body {
   position: absolute;
   display: flex;
   justify-content: center;
-  background-color: #FFE2D0;
+  background-color: transparent;
   border-radius: 1000px;
-  height: 800px;
-  width: 800px;
+  height: var(--tree-base-size);
+  width: var(--tree-base-size);
+}
 
+.tree-bg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--tree-base-size) * var(--wheel-scale));
+  height: calc(var(--tree-base-size) * var(--wheel-scale));
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  background-color: #FFE2D0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.tree-container .controls,
+.tree-container .wheel-stage {
+  position: relative;
+  z-index: 1;
 }
 
 .tree {
@@ -241,11 +261,23 @@ body {
 
 .wheel {
   position: relative;
+  width: 1000px;
   height: 1000px;
   display: flex;
   justify-content: center;
   align-items: center;
 
+}
+
+.wheel-stage {
+  position: relative;
+  width: 1000px;
+  height: 1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: scale(var(--wheel-scale));
+  transform-origin: center center;
 }
 
 .wheel-svg {
@@ -254,7 +286,15 @@ body {
   position: absolute;
 }
 
+@media (max-width: 1024px) {
+  :root {
+    --wheel-scale: 1.02;
+  }
+}
+
 .controls {
+  position: absolute;
+  top: 60px;
   display: flex;
   flex-direction: row;
   align-items: center;

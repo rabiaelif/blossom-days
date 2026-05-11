@@ -4,12 +4,11 @@ import { useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 
 
-export default function HabitForm({ index, habit, handleEditHabit, handleDeleteHabit, editingIndex, setEditingIndex }) {
+export default function HabitForm({ habit, handleEditHabit, handleDeleteHabit, isLoading }) {
   const [inputValue, setInputValue] = useState(habit.name);
 
   const handleCancel = () => {
     setInputValue(habit.name);
-    setEditingIndex(null);
   };
 
   return (
@@ -17,11 +16,11 @@ export default function HabitForm({ index, habit, handleEditHabit, handleDeleteH
       {({ open, close }) => (
         <>
           <PopoverButton
+            disabled={isLoading}
             onClick={() => {
               setInputValue(habit.name);
-              setEditingIndex(open ? null : habit.id); // 🔥 ID ile yönet
             }}
-            className="flex items-center justify-center origin-center hover:bg-black/20 p-1 h-8 w-8 rounded-full cursor-pointer focus:outline-none"
+            className="flex items-center justify-center origin-center hover:bg-black/20 p-1 h-8 w-8 rounded-full cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transform-gpu will-change-transform"
           >
             <BsThreeDotsVertical size={18} />
           </PopoverButton>
@@ -31,43 +30,48 @@ export default function HabitForm({ index, habit, handleEditHabit, handleDeleteH
               className="z-40 fixed inset-0"
               onClick={() => {
                 close();
-                setEditingIndex(null);
               }}
             />
           )}
 
           {open && (
-            <PopoverPanel className="absolute left-full top-1/2 -translate-y-1/2 ml-3 w-64 z-50 bg-white rounded-lg shadow-md p-4 flex flex-col gap-2">
+            <PopoverPanel className="absolute left-full top-1/2 -translate-y-1/2 ml-3 w-64 z-50 bg-white rounded-lg shadow-md p-4 flex flex-col gap-2 transform-gpu will-change-transform">
               <input
+                id="edit-habit-name"
+                name="editHabitName"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-orange-400 transform-gpu will-change-transform"
                 placeholder="Alışkanlık adı"
-                autoFocus // 🔥 Otomatik focus
+                autoFocus
+                disabled={isLoading}
               />
 
               <div className="flex justify-end gap-2">
                 <button
+                  disabled={isLoading}
                   onClick={() => {
-                    handleEditHabit(index, inputValue);
+                    handleEditHabit(habit.name, inputValue);
                     close();
                   }}
-                  className="px-3 py-1 text-white bg-green-500 rounded hover:bg-green-600"
+                  className="px-3 py-1 text-white bg-green-500 rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transform-gpu will-change-transform transition-all"
                 >
-                  Tamam
+                  {isLoading ? 'Güncelleniyor...' : 'Tamam'}
                 </button>
                 <button
+                  disabled={isLoading}
                   onClick={() => {
-                    handleDeleteHabit(index);
+                    handleDeleteHabit(habit.name);
                     close();
                   }}
-                  className="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600"
+                  className="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-500 disabled:opacity-50 disabled:cursor-not-allowed transform-gpu will-change-transform transition-all"
                 >
-                  Sil
+                  {isLoading ? 'Siliniyor...' : 'Sil'}
                 </button>
                 <button
+                  disabled={isLoading}
                   onClick={handleCancel}
-                  className="px-3 py-1 text-white bg-gray-400 rounded hover:bg-gray-500"
+                  className="px-3 py-1 text-white bg-gray-400 rounded hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transform-gpu will-change-transform transition-all"
                 >
                   İptal
                 </button>

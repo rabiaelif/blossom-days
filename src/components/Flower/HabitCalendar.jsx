@@ -1,3 +1,4 @@
+/*
 import { useState } from 'react';
 import { db } from '../lib/firebase';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
@@ -54,7 +55,6 @@ const HabitCalendar = ({ habit }) => {
       </div>
 
       <div className="flower-grid">
-        {/* 4 çiçek için render */}
         {[1, 8, 15, 22].map((startDay, flowerIndex) => (
           <div key={flowerIndex} className="flower-container">
             <Icon 
@@ -71,4 +71,4 @@ const HabitCalendar = ({ habit }) => {
     </div>
   );
 };
-export default HabitCalendar;
+export default HabitCalendar;*/
